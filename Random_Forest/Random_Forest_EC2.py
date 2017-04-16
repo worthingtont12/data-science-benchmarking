@@ -1,5 +1,4 @@
-"""Parallelized Random Forest Code for Benchmarking EC2
-"""
+"""Parallelized Random Forest Code for Benchmarking EC2."""
 import logging
 import numpy as np
 import pandas as pd
