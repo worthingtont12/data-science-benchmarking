@@ -6,11 +6,18 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import sklearn.feature_extraction.text as text
 from sklearn import model_selection
+from boto.s3.connection import S3Connection
 
 # log updates
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # import data
+# connect to s3
+conn = boto.connect_s3()
+
+# connect to gdelt
+gdelt = conn.get_bucket('gdelt-open-data')
+gdelt.list()
 
 # splitting target attribute from examples
 X = tfidfs[tfidfs.columns[:-1]]
