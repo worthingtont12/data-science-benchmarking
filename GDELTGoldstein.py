@@ -22,7 +22,7 @@ def check(x, high, low):
 
 df[30] = df[30].apply(lambda x: check(x, upper,lower))
 
-print(df[1:5][30])
+print(df[:][30])
 
 # I was trying to write a loop at this point to assign values(1,0) to the upper 25% and
 # lower 25% and then drop all the other values. For some reason it wasn't reassigning
