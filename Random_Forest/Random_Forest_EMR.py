@@ -1,9 +1,11 @@
 """Random Forest Code for Benchmarking EMR."""
 from pyspark.mllib.tree import RandomForest, RandomForestModel
 from pyspark.mllib.util import MLUtils
+from pyspark import SparkContext
+sc = SparkContext()
 
 # Load and parse the data file into an RDD of LabeledPoint.
-data = MLUtils.loadLibSVMFile(sc, 'data/mllib/sample_libsvm_data.txt')
+data = MLUtils.loadLibSVMFile(sc, 'sample_libsvm_data.txt')
 # Split the data into training and test sets (30% held out for testing)
 (trainingData, testData) = data.randomSplit([0.7, 0.3])
 
@@ -19,7 +21,8 @@ model = RandomForest.trainClassifier(trainingData, numClasses=2, categoricalFeat
 # Evaluate model on test instances and compute test error
 predictions = model.predict(testData.map(lambda x: x.features))
 labelsAndPredictions = testData.map(lambda lp: lp.label).zip(predictions)
-testErr = labelsAndPredictions.filter(lambda (v, p): v != p).count() / float(testData.count())
+testErr = labelsAndPredictions.filter(
+    lambda seq: seq[0] != seq[1]).count() / float(testData.count())
 print('Test Error = ' + str(testErr))
 print('Learned classification forest model:')
 print(model.toDebugString())
