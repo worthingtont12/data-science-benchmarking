@@ -6,26 +6,18 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import sklearn.feature_extraction.text as text
 from sklearn import model_selection
+from load_data import df
 
 # log updates
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-# import one day
-df = pd.read_csv("~/Desktop/20130530.export.csv",  delimiter="\t")
-
-# column names
-
-# create new binary variable
-df["negative_impact"] =
-
-# drop unneeded variables
 
 # splitting target attribute from examples
 X = df[df.columns[:-1]]
 Y = np.array(df.loc[:, ['negative_impact']])
 
 # Random Forest Model
-seed = 7
+seed = 2017
 rf = RandomForestClassifier(n_jobs=-1)
 
 # Cross Validate

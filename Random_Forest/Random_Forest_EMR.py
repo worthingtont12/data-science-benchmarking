@@ -19,7 +19,7 @@ data = MLUtils.loadLibSVMFile(sc, 'sample_libsvm_data.txt')
 start_time = timeit.default_timer()
 model = RandomForest.trainClassifier(trainingData, numClasses=2, categoricalFeaturesInfo={},
                                      numTrees=3, featureSubsetStrategy="auto",
-                                     impurity='gini', maxDepth=4, maxBins=32, seed=7)
+                                     impurity='gini', maxDepth=4, maxBins=32, seed=2017)
 print('Time to train model: ' + str(timeit.default_timer() - start_time) + ' seconds')
 
 # Evaluate model on test instances and compute test error
