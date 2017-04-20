@@ -1,5 +1,6 @@
 """Parallelized Random Forest Code for Benchmarking EC2."""
 import logging
+import timeit
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
