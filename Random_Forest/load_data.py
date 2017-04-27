@@ -73,4 +73,10 @@ categorical_columns = finaldf.select_dtypes(include=['category']).columns
 for i in categorical_columns:
     finaldf[i] = category_le.fit_transform(finaldf[i])
 
-finaldf = finaldf.select_dtypes(exclude=['category']).interpolate()
+tempdf = finaldf.select_dtypes(exclude=['category']).interpolate()
+
+num_obs = input('Enter number of observations: ')
+
+finaldf = tempdf.sample(int(num_obs), replace = False, random_state = 2017)
+
+del tempdf

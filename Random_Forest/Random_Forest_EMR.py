@@ -1,4 +1,4 @@
-    """Random Forest Code for Benchmarking EMR."""
+"""Random Forest Code for Benchmarking EMR."""
 import timeit
 import logging
 from pyspark.mllib.regression import LabeledPoint

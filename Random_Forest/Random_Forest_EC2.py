@@ -30,7 +30,7 @@ start_time = timeit.default_timer()
 rf = RandomForestClassifier(n_jobs=-1, random_state=2017, n_estimators=100)
 
 # train random forest
-rf.fit(features, target)
+rf.fit(features, train_target)
 
 # end timer
 print('Time to train model: ' + str(timeit.default_timer() - start_time) + ' seconds')
