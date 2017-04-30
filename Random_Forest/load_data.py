@@ -21,7 +21,7 @@ def check(x, high, low):
 
 def load_clean_data():
     data_files = []
-    direct = listdir('/home/ec2-user/data-science-benchmarking/data/')
+    direct = listdir('./')
 
     for file in direct:
         if file.endswith('.csv'):
@@ -29,36 +29,36 @@ def load_clean_data():
 
     final = pd.DataFrame()
     list_dfs = []
-    for file in data_files:
-        df = pd.read_csv('/home/ec2-user/data-science-benchmarking/data/' + file, delimiter='\t', header=None)
-        print("Appending "+file+" to list.")
-	list_dfs.append(df)
+    for file in data_files[0:200]:
+        final = pd.read_csv('./' + file, delimiter='\t', header=None)
+        # drop unneeded columns
+        final = final.drop(final.columns[[0, 1, 2, 3, 4, 6, 16, 36, 38,
+                                          41, 43, 45, 48, 50, 52, 55, 56, 57]], axis=1)
 
-    print("Concatenating dataframes")
-    final = pd.concat(list_dfs)
-    print("Done concatenating dataframes")
-    # drop unneeded columns
-    final = final.drop(final.columns[[0, 1, 2, 3, 4, 6, 16, 36, 38,
-                                      41, 43, 45, 48, 50, 52, 55, 56, 57]], axis=1)
+       # checks if elements are finite numbers
+        final = final[np.isfinite(final[30])]
 
-   # checks if elements are finite numbers
-    final = final[np.isfinite(final[30])]
+        # creating target atrribute--reduces variable from 10 levels too 3
 
-    # creating target atrribute--reduces variable from 10 levels too 3
+        # upper threshold of data
+        upper = np.percentile(final.ix[:, 30], 75)
 
-    # upper threshold of data
-    upper = np.percentile(final.ix[:, 30], 75)
+        # lower threshold
+        lower = np.percentile(final.ix[:, 30], 25)
 
-    # lower threshold
-    lower = np.percentile(final.ix[:, 30], 25)
+        # applying function to reduce levels
+        final['target'] = final[30].apply(lambda x: check(x, upper, lower))
 
-    # applying function to reduce levels
-    final['target'] = final[30].apply(lambda x: check(x, upper, lower))
+        # filtering to categories of interest
+        final = final.drop(final[final['target'] == -1].index)
+        print("Appending " + file + " to list.")
+        list_dfs.append(final)
 
-    # filtering to categories of interest
-    final = final.drop(final[final['target'] == -1].index)
+    print("Concatenating dataFrames")
+    finaldf = pd.concat(list_dfs)
+    print("Done Concatenating")
 
-    return final
+    return finaldf
 
 finaldf = load_clean_data()
 index = 0
@@ -77,9 +77,11 @@ for i in categorical_columns:
     finaldf[i] = category_le.fit_transform(finaldf[i])
 
 tempdf = finaldf.select_dtypes(exclude=['category']).interpolate()
+del finaldf
 
-num_obs = input('Enter number of observations: ')
+print("Number of observations" + str(len(tempdf)))
 
-finaldf = tempdf.sample(int(num_obs), replace = False, random_state = 2017)
+numobs = input("Enter number of observations: ")
 
+finaldf = tempdf.sample(int(numobs), replace=False, random_state=2017)
 del tempdf
