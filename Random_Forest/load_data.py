@@ -21,7 +21,7 @@ def check(x, high, low):
 
 def load_clean_data():
     data_files = []
-    direct = listdir('./')
+    direct = listdir('/home/ec2-user/data-science-benchmarking/data/')
 
     for file in direct:
         if file.endswith('.csv'):
@@ -30,10 +30,13 @@ def load_clean_data():
     final = pd.DataFrame()
     list_dfs = []
     for file in data_files:
-        df = pd.read_csv('./' + file, delimiter='\t', header=None)
-        list_dfs.append(df)
+        df = pd.read_csv('/home/ec2-user/data-science-benchmarking/data/' + file, delimiter='\t', header=None)
+        print("Appending "+file+" to list.")
+	list_dfs.append(df)
 
+    print("Concatenating dataframes")
     final = pd.concat(list_dfs)
+    print("Done concatenating dataframes")
     # drop unneeded columns
     final = final.drop(final.columns[[0, 1, 2, 3, 4, 6, 16, 36, 38,
                                       41, 43, 45, 48, 50, 52, 55, 56, 57]], axis=1)
